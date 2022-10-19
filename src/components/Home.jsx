@@ -1,11 +1,15 @@
 import React, { useContext } from "react";
+import { Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/UserContext";
 
 const Home = () => {
   const { user } = useContext(AuthContext);
-  const { photoURL, displayName } = user;
+  const { photoURL, displayName, emailVerified } = user;
   const photo = photoURL;
   const mycards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  if (emailVerified !== true) {
+    return <Navigate to="/login"></Navigate>;
+  }
 
   return (
     <div className="min-h-screen ">
@@ -14,7 +18,10 @@ const Home = () => {
         <div>
           <div className="avatar">
             <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-              <img src={photo ? photo : ""} alt="" />
+              <img
+                src={photo ? photo : "https://placeimg.com/192/192/people"}
+                alt=""
+              />
             </div>
           </div>
         </div>

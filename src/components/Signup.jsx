@@ -3,7 +3,8 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/UserContext";
 
 const Signup = () => {
-  const { createNewUser, updateUser, user, loader } = useContext(AuthContext);
+  const { createNewUser, updateUser, user, loader, verifyEmail } =
+    useContext(AuthContext);
   const navigate = useNavigate();
   const handleSignUp = (event) => {
     event.preventDefault();
@@ -21,7 +22,11 @@ const Signup = () => {
           .then(() => {
             console.log("Successfully register and name : ", name);
             form.reset();
-            navigate("/");
+            verifyEmail().then(() => {
+              alert("please check your email and verify it");
+            });
+            navigate("/login");
+            console.log(result.user);
           })
           .catch((error) => {
             console.log(error);

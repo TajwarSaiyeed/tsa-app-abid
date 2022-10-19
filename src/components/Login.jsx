@@ -13,9 +13,15 @@ const Login = () => {
 
     signInUser(email, password)
       .then((result) => {
-        form.reset();
-        console.log("Succesfully sign in");
-        navigate("/");
+        if (result.user.emailVerified === true) {
+          navigate("/");
+          console.log(result.user);
+          form.reset();
+          console.log("Succesfully sign in");
+        } else {
+          alert("Please Verify Your Email");
+          return;
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -34,7 +40,8 @@ const Login = () => {
       ></button>
     );
   }
-  if (user && user.uid) {
+
+  if (user && user.uid && user.emailVerified === true) {
     return <Navigate to="/"></Navigate>;
   }
   return (
@@ -53,6 +60,7 @@ const Login = () => {
             type="email"
             placeholder="Type Your Email..."
             className="input input-bordered w-full max-w-xs"
+            required
           />
         </div>
         <div className="form-control w-full max-w-xs">
@@ -64,6 +72,7 @@ const Login = () => {
             type="password"
             placeholder="Type Your Password"
             className="input input-bordered w-full max-w-xs"
+            required
           />
         </div>
         <div className="mt-5">

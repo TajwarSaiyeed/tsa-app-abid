@@ -4,8 +4,9 @@ import { AuthContext } from "../../contexts/UserContext";
 
 const Navbar = () => {
   const { user, userSignOut, signInGoogle } = useContext(AuthContext);
+  console.log(user);
   const photo = user?.photoURL;
-  console.log(photo);
+  // console.log(photo);
   const handleSignOut = () => {
     userSignOut()
       .then(() => {
@@ -37,7 +38,16 @@ const Navbar = () => {
       <div className="flex-none">
         <div className="dropdown dropdown-end">
           <div>
-            {!user ? (
+            {user && user.emailVerified === true ? (
+              <>
+                <button
+                  onClick={handleSignOut}
+                  className="btn glass mx-2 bg-red-600"
+                >
+                  LogOut
+                </button>
+              </>
+            ) : (
               <>
                 <button
                   className="btn btn-outline mx-2"
@@ -52,21 +62,17 @@ const Navbar = () => {
                   SignUp
                 </Link>
               </>
-            ) : (
-              <button
-                onClick={handleSignOut}
-                className="btn glass mx-2 bg-red-600"
-              >
-                LogOut
-              </button>
             )}
           </div>
         </div>
-        {user && (
+        {user?.emailVerified === true && (
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
-                <img src={photo ? photo : ""} alt="" />
+                <img
+                  src={photo ? photo : "https://placeimg.com/192/192/people"}
+                  alt=""
+                />
               </div>
             </label>
             <ul

@@ -4,12 +4,14 @@ import {
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   updateProfile,
 } from "firebase/auth";
 import { app } from "../firebase/firebase.init";
+// import { Navigate } from "react-router-dom";
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -38,6 +40,9 @@ const UserContext = ({ children }) => {
       displayName: name,
     });
   };
+  const verifyEmail = () => {
+    return sendEmailVerification(auth.currentUser);
+  };
 
   const userSignOut = () => {
     return signOut(auth);
@@ -45,8 +50,11 @@ const UserContext = ({ children }) => {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (currentUser) => {
+      // if (currentUser.emailVerified === true) {
       setUser(currentUser);
       setLoader(false);
+      // }
+      // return <Navigate to="/signup"></Navigate>;
     });
 
     return () => {
@@ -63,6 +71,7 @@ const UserContext = ({ children }) => {
     userSignOut,
     loader,
     signInGoogle,
+    verifyEmail,
   };
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
